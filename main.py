@@ -1,10 +1,14 @@
 import pygame
 import time
+import sys
+import math
 import random
 import numpy as np
 
 random.seed(time.time())
-
+AI = 1
+PLAYER = 0
+pygame.init()
 class board:
     #Default Constructor (doesn't return )
     # def __init__(self):
@@ -124,7 +128,16 @@ class board:
                     return True
         
         return False
+    def score_position(self,coin):
+        #Score Heuristics For Horizontal
+        
+        pass
 
+##
+##
+##                  NOT IN CLASS AFTER THIS LINE!!!!!!!!!
+##
+##
 
 def PvP(num_rows, num_columns):
     Board = board(num_rows, num_columns)
@@ -148,7 +161,7 @@ def PvP(num_rows, num_columns):
         print("1. Place coin")
         print("2. Pop coin")
         print("3. Quit")
-        userinput = input("Player " + str((turn % 2) + 1) + ": What do you want to do with your coin\n")
+        userinput = input("Player " + str((turn % 2) + 1) + ": What do you want to do with your coin?\n")
 
         if userinput == "3":
             running = False
@@ -192,6 +205,76 @@ def PvP(num_rows, num_columns):
 
 def PvEasy(num_rows, num_columns):
     Board = board(num_rows, num_columns)
+    print("Your Opponent: Random Robbie!!")
+    print()
+
+    print("Player will enter a character symbol for their coin\n")
+    player_symbol = input("Player: Please enter your symbol\n")
+    AI_symbol = "A"
+    
+    while player_symbol == AI_symbol or player_symbol == "0":
+        print("Same symbols or player's symbol is 0\n")
+        player_symbol = input("Player: Please enter your symbol\n")
+
+    running = True
+    while (running):
+
+        print("Options:")
+        print("1. Place coin")
+        print("2. Pop coin")
+        print("3. Quit")
+        userinput = input("Player: What do you want to do with your coin?\n")
+
+        if userinput == "3":
+            running = False
+            break
+
+
+        elif userinput == "1":
+            col = input("Player : Select where to place (1 - " + str(Board.num_columns) + "): ")
+            if (not col.isnumeric()):
+                print("Error, invalid input")
+            
+            else:
+                Board.place_coin(int(col), player_symbol)
+            
+        elif userinput == "2":
+            col = input("Player: Select where to remove coin (1 - " + str(Board.num_columns) + "): ")
+
+            if (not col.isnumeric()):
+                print("Error, invalid input")
+            else:
+                Board.remove_Coin(int(col))
+                running = False
+
+        AI_column = random.randint(1, Board.num_columns)
+
+        while (Board.get_first_empty_spot_in_column(AI_column - 1) == -1):
+            AI_column = random.randint(1, Board.num_columns)
+        
+        Board.place_coin(AI_column, AI_symbol)
+        print()
+        Board.print_board()
+        print()
+        print("Robbie Placed Coin in Column: " + str(AI_column) + ".")
+        print()
+
+        #Change 2 and 6 to find wins
+        if Board.check_win(player_symbol):
+            print("The player wins!!", end=" ")
+            print("Thanks for playing!")
+            running = False
+        elif Board.check_win(AI_symbol):
+            print("The computer wins!!", end=" ")
+            print("Thanks for playing!")
+            running = False
+        elif Board.check_tie():
+            print("We have a tie", end=" ")
+            print("Thanks for playing!")
+            running = False
+
+def PvMod(num_rows, num_columns):
+    Board = board(num_rows, num_columns)
     
 
     print("Player will enter a character symbol for their coin\n")
@@ -209,7 +292,7 @@ def PvEasy(num_rows, num_columns):
         print("1. Place coin")
         print("2. Pop coin")
         print("3. Quit")
-        userinput = input("Player: What do you want to do with your coin\n")
+        userinput = input("Player: What do you want to do with your coin?\n")
 
         if userinput == "3":
             running = False
@@ -253,12 +336,10 @@ def PvEasy(num_rows, num_columns):
         elif Board.check_tie():
             print("We have a tie")
             running = False
-            
-
 
 def main():
-    num_columns = 7
-    num_rows = 6
+    num_columns = 6
+    num_rows = 7
 
     print("Welcome to Connect 4++!")
     
@@ -266,23 +347,31 @@ def main():
     while running:
     
         print("User Menu:")
-        print("Current Board Size: " str(num_rows) + " x " + str(num_columns))
+        print("Current Board Size: " + str(num_rows) + " x " + str(num_columns))
         print("1. Player vs AI")
         print("2. Player vs Player")
         print("3. Change Board Size")
+        print("4. Quit")
         userInput = input("Please select an option: ") #whatever user inputs will be stored in userInput
 
         if userInput == "1":
             PvEasy(num_rows, num_columns)
         
-        elif userInput == "2"
+        elif userInput == "2":
+            PvP(num_rows, num_columns)
+        
+        elif userInput == "3":
+            new_column_num = input("Enter board width")
+            num_columns = int(new_column_num)
+            new_row_num = input("Enter board height: ")
+            num_rows = int(new_row_num)
 
+        elif userInput == "4" or userInput == "Quit" or userInput == "q" or userInput == "Q":
+            print("Thanks for playing!")
+            break
+ 
         print()
 
-    if userInput == "1":
-        PvEasy(4, 4)
-    elif userInput == "2":
-        PvP(4, 4)
 
 
     
