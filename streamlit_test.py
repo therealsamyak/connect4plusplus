@@ -2,7 +2,6 @@ import time
 import sys
 import math
 import random
-import numpy as np
 
 random.seed(time.time())
 AI = 1
@@ -312,4 +311,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
