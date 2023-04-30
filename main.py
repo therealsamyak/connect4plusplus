@@ -1,8 +1,6 @@
 import time
 import random
 import copy
-# import pygame
-# pygame.init()
 
 random.seed(time.time())  #seeding the random function to the current time
 
