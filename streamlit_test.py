@@ -2,6 +2,7 @@ import time
 import sys
 import math
 import random
+import streamlit
 
 random.seed(time.time())
 AI = 1
@@ -31,7 +32,11 @@ class board:
         
         self.game_over = False
 
-    def valid(self, board, column):
+    def valid(self, column):
+        '''
+        Returns True if Valid
+        '''
+
         column -= 1
         for r in range(self.num_rows):
             if self.board[r][column] == "0":
