@@ -1,30 +1,19 @@
 # Connect4++
+The simple game of Connect 4, except with multiple game modes!
 
-## Inspirations
-Connect 4 is a simple board game rulewise, yet the theory behind it is very interesting. That is why we wanted to try our hands at both understanding this theory, and adding our own modifications based on it. 
+## Game Modes
 
-## What It Does
-We have multiple game modes available to play:
+**1. Player vs Player** - The classic game mode we all know and love.<br>
+**2. Player vs Easy Computer** - Play against Random Robbie!<br>
+**3. Player vs Medium Computer** - Play against Mediocre Matthew!<br>
 
-**1. Player vs Player** - Classic Connect 4 Experience with both Place and Pop options!
+## Unique Aspects
+There are up to 289 different possible board sizes between 4 x 4 and 20 x 20! Default is 7 columns x 6 rows.
+The Medium Computer has an "AI" based on a scoring system, used to weight moves against one another.
 
-**2. Player vs Easy AI** - Single Player Connect 4 against Random Robbie!
 
-**3. Player vs Medium AI** - Single Player Connect 4 against Mediocre Matthew!
+## Credits
+Made for Citrus Hack 2023 @ UCR.
 
-In addition, the board size can be changed for any of the game modes above, from 4 x 4 up to 20 x 20.
-
-## How We Built It
-We built a scalable matrix with filler values to serve as our base board. Next, we determined the "coin" physics by accounting for gravity. After that, we accounted for edge cases, like how it is impossible to place a coin on a column that is already full. Most importantly, we had to code the win conditions (4-in-a-row alongside the vertical, horizontal, positive-sloped, and negative-sloped axis). Finally, we coded our own miniature AIs, using both random number generators and a "score" system.  
-
-## Challenges We Ran Into
-Implementing the score system for the Medium AI was the hardest part of the challenge. It took forever to get it to work somewhat decently. 
-
-## Accomplishments that we're proud of
-Adding "voicelines" to the AIs was one of the best decisions we made, because it was really funny and added more personality to the AI and the game. 
-
-## What We Learned
-We learned the importance of time-management. In addition, we learned how to implement the concepts we learned in C++ to Python, and make them work effectively.
-
-## What's Next for Connect4++
-We are thinking of potentially adding a game mode where the board starts full, and you keep "popping". In addition, adding multi-language support either through an API or just manually having multiple files depending on the language would also be nice. 
+Engineers: [Samyak](https://github.com/therealsamyak/), [Jay](https://github.com/depthcharge78/), [Shrey](https://github.com/ShreyGK5/)<br>
+"Voicelines": Chat-GPT4
