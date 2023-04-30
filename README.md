@@ -12,7 +12,7 @@ We have multiple game modes available to play:
 
 **3. Player vs Medium AI** - Single Player Connect 4 against Mediocre Matthew!
 
-In addition, the board size can be changed for any of the game modes above, from 4 x 4 up to 20 x 20
+In addition, the board size can be changed for any of the game modes above, from 4 x 4 up to 20 x 20.
 
 ## How We Built It
 We built a scalable matrix with filler values to serve as our base board. Next, we determined the "coin" physics by accounting for gravity. After that, we accounted for edge cases, like how it is impossible to place a coin on a column that is already full. Most importantly, we had to code the win conditions (4-in-a-row alongside the vertical, horizontal, positive-sloped, and negative-sloped axis). Finally, we coded our own miniature AIs, using both random number generators and a "score" system.  
