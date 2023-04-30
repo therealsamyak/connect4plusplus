@@ -580,7 +580,7 @@ def main():
         print()
         print("Menu: ")
         print(" 1. Player vs Easy AI")
-        print(" 2. Player vs Hard AI")
+        print(" 2. Player vs Medium AI")
         print(" 3. Player vs Player")
         print(" 4. Change Board Size")
         print(" 5. Quit")
@@ -602,8 +602,8 @@ def main():
             new_row_num = input("Enter board height: ")
             num_rows = int(new_row_num)
             
-            while (num_columns * num_rows > 4000):
-                print("Error. Board Size is too large. Please make the area of the board less than 4000")
+            while (num_columns * num_rows > 4000 or (num_columns < 4 and num_rows < 4)):
+                print("Error. Board Size is invalid. Please make the board size between 4x4 and 20x20")
                 print()
                 new_column_num = input("Enter board width: ")
                 num_columns = int(new_column_num)
