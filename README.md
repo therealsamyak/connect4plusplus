@@ -1,5 +1,6 @@
 # Connect4++
 The simple game of Connect 4, except with multiple game modes!
+[Trinket.io Link](https://skaka008-ucr-edu.trinket.io/sites/connect4plusplus)
 
 ## Game Modes
 
