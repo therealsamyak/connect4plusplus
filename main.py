@@ -138,6 +138,15 @@ class board:
 ##                  NOT IN CLASS AFTER THIS LINE!!!!!!!!!
 ##
 ##
+def load_words():
+    inFile = open("Lines.txt")
+    wordlist = []
+    for line in inFile:
+        new_line = line.split("\n")
+        wordlist.append(new_line[0])
+    return wordlist
+
+
 
 def PvP(num_rows, num_columns):
     Board = board(num_rows, num_columns)
@@ -204,6 +213,8 @@ def PvP(num_rows, num_columns):
         
 
 def PvEasy(num_rows, num_columns):
+    AI_voicelines = load_words()
+
     Board = board(num_rows, num_columns)
     print("Your Opponent: Random Robbie!!")
     print()
@@ -218,6 +229,9 @@ def PvEasy(num_rows, num_columns):
 
     running = True
     while (running):
+
+        Board.print_board()
+        print()
 
         print("Options:")
         print("1. Place coin")
@@ -253,10 +267,12 @@ def PvEasy(num_rows, num_columns):
             AI_column = random.randint(1, Board.num_columns)
         
         Board.place_coin(AI_column, AI_symbol)
-        print()
-        Board.print_board()
-        print()
         print("Robbie Placed Coin in Column: " + str(AI_column) + ".")
+        
+        
+        randomLine = random.randint(0, len(AI_voicelines) - 1)
+        print("Robbie: \"" + str(AI_voicelines[randomLine]) + "\"")
+        
         print()
 
         #Change 2 and 6 to find wins
@@ -274,6 +290,7 @@ def PvEasy(num_rows, num_columns):
             running = False
 
 def PvMod(num_rows, num_columns):
+    return
     Board = board(num_rows, num_columns)
     
 
@@ -380,3 +397,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
