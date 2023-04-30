@@ -1,22 +1,15 @@
-import pygame
 import time
-import sys
-import math
 import random
-import numpy as np
+import copy
 
-random.seed(time.time())
-AI = 1
-PLAYER = 0
-pygame.init()
+random.seed(time.time())  #seeding the random function to the current time
+
 class board:
-    #Default Constructor (doesn't return )
-    # def __init__(self):
-    #     #creates 6 by 7 matrix
-    #     self.board = [["0", "0", "0", "0", "0", "0", "0"], ["0", "0", "0", "0", "0", "0", "0"], ["0", "0", "0", "0", "0", "0", "0"], ["0", "0", "0", "0", "0", "0", "0"], ["0", "0", "0", "0", "0", "0", "0"], ["0", "0", "0", "0", "0", "0", "0"]]
-    #     self.game_over = False #game_over for this board
     
     def __init__(self, num_rows, num_columns):
+        '''
+        Default constructor
+        '''
         self.num_rows = num_rows
         self.num_columns = num_columns
         self.board = []
@@ -33,8 +26,24 @@ class board:
             i += 1
         
         self.game_over = False
+        self.AI_COIN = "A"
+        self.PLAYER_COIN = "*"
 
-    def valid(self, board, column):
+    def copy(self):
+        '''
+        Copy constructor
+        '''
+        temp_class = board(self.num_columns, self.num_rows)
+        temp_class.board = copy.deepcopy(self.board)
+        temp_class.game_over = self.game_over
+
+        return temp_class
+
+        
+    def valid(self, column):
+        '''
+        Checks whether the spot inputted is free or not 
+        '''
         column -= 1
         for r in range(self.num_rows):
             if self.board[r][column] == "0":
@@ -42,7 +51,9 @@ class board:
         return False
     
     def place_coin(self, column, piece):
-        
+        '''
+         Function that substitutes a 0 with a player's value
+        '''
         if (column > self.num_columns or column <= 0):
             print("Invalid Column")
             return
@@ -55,6 +66,9 @@ class board:
             self.board[self.get_first_empty_spot_in_column(column)][column] = piece
 
     def remove_Coin(self, column):
+        '''
+        Removes the bottom most coin of the column inputted and brings down the coins above
+        '''
         if (column > self.num_columns or column <= 0):
             print("Invalid Column")
             return
@@ -66,6 +80,9 @@ class board:
         self.board[self.num_rows - 1][column] = "0"
 
     def get_first_empty_spot_in_column(self, column):
+        '''
+        Returns 
+        '''
         for i in range(self.num_rows):
             if self.board[i][column] == "0":
                 return i
@@ -74,10 +91,16 @@ class board:
     
     #getter function for game_over
     def game_over(self):
+        '''
+        Returns state of game_over
+        '''
         return self.game_over
     
     #getter function for print board
     def print_board(self):
+        '''
+        Prints out the current board 
+        '''
         for i in range(self.num_rows - 1, -1, -1):
             print("| ", end="")
             for c in range(self.num_columns):
@@ -87,6 +110,9 @@ class board:
 
     
     def check_tie(self):
+        '''
+        Checks whether we had a tie or not
+        '''
         checker_Full = True
         for i in range(self.num_rows):
             for j in range(self.num_columns):
@@ -128,11 +154,89 @@ class board:
                     return True
         
         return False
-    
-    
-    
+    #Helper Functions
+    def drop_piece(self,row,col,coin):
+        self.board[row][col] = coin
 
+    def get_board(self):
+        return self.board
 
+    def get_next_open_row(self,col):
+        for r in range(self.num_rows-1):
+            if self.board[r][col] == "0":
+                return r
+
+    def is_valid_location(self,col):
+        return self.board[self.num_rows-1][col] == "0"
+
+    def get_valid_locations(self):
+        valid_locations = []
+        for col in range(self.num_columns):
+            if self.valid(self,col):
+                valid_locations.append(col)
+        return valid_locations
+    def update_coins(self, aiCoin,playerCoin):
+        AI_COIN = aiCoin
+        PLAYER_COIN = playerCoin
+    #Helper Function To find Score of player
+    def evaluate_window(self, window, player_coin, ai_coin, coinType):
+        EMPTY = 0
+        score = 0
+        opp_coin = player_coin
+        if(coinType == player_coin):
+            opp_coin = ai_coin
+        if window.count(coinType) == 4:
+            score += 100
+        elif window.count(coinType) == 3 and window.count(EMPTY) == 1:
+            score += 5
+        elif window.count(coinType) == 2 and window.count(EMPTY) == 2:
+            score += 2
+        if window.count(opp_coin) == 3 and window.count(EMPTY) == 1:
+            score -= 4
+
+        return score
+
+    def score_position(self,coinType):
+        WINDOW_LENGTH = 4
+        SCORE = 0
+        EMPTY = "0"
+        #score center column
+        center_array = [i for i in list(self.board[0 : self.num_columns//2])]
+        center_count = center_array.count(coinType)
+        SCORE += center_count * 3
+        #Score Horizontal
+        for r in range(self.num_rows):
+            row_array = [i for i in list(self.board[r : ])]
+            for c in range(self.num_columns-3):
+                window = row_array[c: c+WINDOW_LENGTH]
+                #4 ina row winning
+                if window.count(coinType) == 4:
+                    SCORE += 100
+                #3 in a row
+                elif window.count(coinType) == 3 and window.count(EMPTY) == 1:
+                    SCORE += 10
+        #Score Vertical
+        for c in range(self.num_columns):
+            col_array = [i for i in list(self.board[0 : c])]
+            for c in range(self.num_columns - 3):
+                window = row_array[c : c + WINDOW_LENGTH]
+                SCORE += self.evaluate_window(window, self.PLAYER_COIN, self.AI_COIN, coinType)
+        return SCORE
+
+    def pick_best_move(self,coinType):
+        valid_locations = self.get_valid_locations()
+        best_col = random.choice(valid_locations)
+        best_score = 0
+        for col in valid_locations:
+            row = self.get_next_open_row(col)
+            temp_board = self.copy()
+            temp_board.drop_piece(row,col,coinType)
+            score = temp_board.score_position(coinType)
+            if score > best_score:
+                best_score = score
+                best_col = col
+
+        return best_col + 1
 ##
 ##
 ##                  NOT IN CLASS AFTER THIS LINE!!!!!!!!!
@@ -290,8 +394,7 @@ def PvEasy(num_rows, num_columns):
             running = False
 
 def PvMod(num_rows, num_columns):
-    return
-    Board = board(num_rows, num_columns)
+    Board = board(num_columns, num_rows)
     
 
     print("Player will enter a character symbol for their coin\n")
@@ -305,11 +408,16 @@ def PvMod(num_rows, num_columns):
     running = True
     while (running):
 
+        print()
+        Board.print_board()
+        print()
+
         print("Options:")
         print("1. Place coin")
         print("2. Pop coin")
         print("3. Quit")
         userinput = input("Player: What do you want to do with your coin?\n")
+        col = ""
 
         if userinput == "3":
             running = False
@@ -331,18 +439,16 @@ def PvMod(num_rows, num_columns):
                 print("Error, invalid input")
             else:
                 Board.remove_Coin(int(col))
-                running = False
 
-        AI_column = random.randint(1, Board.num_columns)
+        AI_column = Board.pick_best_move(AI_symbol)
 
-        while (Board.get_first_empty_spot_in_column(AI_column - 1) == -1):
-            AI_column = random.randint(1, Board.num_columns)
+        if (random.randint(1, 100) == 50):
+            Board.remove_Coin(int(col))
+            print("AI removed Coin in Column: " + str(AI_column) + ".")
+        else:
+            Board.place_coin(AI_column, AI_symbol)
+            print("AI Placed Coin in Column: " + str(AI_column) + ".")
         
-        Board.place_coin(AI_column, AI_symbol)
-        print("AI Placed Coin in Column: " + str(AI_column) + ".")
-        print()
-        Board.print_board()
-        print()
         #Change 2 and 6 to find wins
         if Board.check_win(player_symbol):
             print("The player wins!!")
@@ -362,38 +468,33 @@ def main():
     
     running = True
     while running:
-    
-        print("User Menu:")
-        print("Current Board Size: " + str(num_rows) + " x " + str(num_columns))
-        print("1. Player vs AI")
-        print("2. Player vs Player")
-        print("3. Change Board Size")
-        print("4. Quit")
+        print("1. Player vs Easy AI")
+        print("2. Player vs Hard AI")
+        print("3. Player vs Player")
+        print("4. Change Board Size")
+        print("5. Quit")
         userInput = input("Please select an option: ") #whatever user inputs will be stored in userInput
 
         if userInput == "1":
             PvEasy(num_rows, num_columns)
         
         elif userInput == "2":
-            PvP(num_rows, num_columns)
-        
+            PvMod(num_rows, num_columns)
+
         elif userInput == "3":
-            new_column_num = input("Enter board width")
+            PvP(num_rows, num_columns)
+
+        elif userInput == "4":
+            new_column_num = input("Enter board width: ")
             num_columns = int(new_column_num)
             new_row_num = input("Enter board height: ")
             num_rows = int(new_row_num)
 
-        elif userInput == "4" or userInput == "Quit" or userInput == "q" or userInput == "Q":
+        elif userInput in ["5", "Quit", "quit", "q","Q"]:
             print("Thanks for playing!")
             break
  
         print()
-
-
-
-    
-
-
 
 if __name__ == "__main__":
     main()
