@@ -128,10 +128,10 @@ class board:
                     return True
         
         return False
-    def score_position(self,coin):
-        #Score Heuristics For Horizontal
-        
-        pass
+    
+    
+    
+
 
 ##
 ##
@@ -397,4 +397,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
