@@ -277,11 +277,7 @@ class board:
                     best_col = col
 
         return best_col + 1
-##
-##
-##  NOT IN CLASS AFTER THIS LINE!!!!!!!!!
-##
-##
+
 
 def load_words():
     '''
