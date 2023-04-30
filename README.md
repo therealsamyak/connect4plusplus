@@ -1,4 +1,4 @@
-# Connect4plusplus
+# Connect4++
 
 ## Inspirations
 Connect 4 is a simple board game rulewise, yet the theory behind it is very interesting. That is why we wanted to try our hands at both understanding this theory, and adding our own modifications based on it. 
