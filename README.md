@@ -16,5 +16,5 @@ The Medium Computer has an "AI" based on a scoring system, used to weight moves 
 ## Credits
 Made for Citrus Hack 2023 @ UCR.
 
-Engineers: [Samyak](https://github.com/therealsamyak/), [Jay](https://github.com/depthcharge78/), [Shrey](https://github.com/ShreyGK5/)<br>
+Engineers: [Samyak](https://github.com/therealsamyak/), [Jay](https://github.com/depthcharge78/), [Shrey](https://github.com/ShreyGK6/)<br>
 "Voicelines": Chat-GPT4
